@@ -28,7 +28,8 @@ async function getCourseData(courseId: string) {
 }
 
 // Group resources by type
-function groupByType(resources: Awaited<ReturnType<typeof getCourseData>>["resources"]) {
+type CourseWithResources = NonNullable<Awaited<ReturnType<typeof getCourseData>>>;
+function groupByType(resources: CourseWithResources["resources"]) {
   const order = ["notes", "slides", "books", "past-papers", "assignments", "miscellaneous"];
   const groups: Record<string, typeof resources> = {};
   for (const r of resources) {
