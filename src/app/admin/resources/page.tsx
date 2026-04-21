@@ -14,7 +14,7 @@ async function getResources(params: Props["searchParams"]) {
   const page = parseInt(params.page ?? "1", 10);
   const skip = (page - 1) * PAGE_SIZE;
 
-  const where: Parameters<typeof prisma.resource.findMany>[0]["where"] = {};
+  const where: any = {};
   if (params.q) {
     where.OR = [
       { title: { contains: params.q, mode: "insensitive" } },
