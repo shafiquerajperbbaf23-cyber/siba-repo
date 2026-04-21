@@ -1,4 +1,5 @@
 // src/app/admin/dashboard/page.tsx
+export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/prisma";
 import { ResourceTypeBadge } from "@/components/ui/ResourceTypeBadge";
 import Link from "next/link";
