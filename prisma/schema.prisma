@@ -1,0 +1,137 @@
+// SIBA Academic Repository — Prisma Schema
+// PostgreSQL + Prisma ORM
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── CORE MODELS ──────────────────────────────────────────────────────────────
+
+model Program {
+  id          String     @id @default(cuid())
+  name        String     @unique          // e.g. "BBA", "THP"
+  slug        String     @unique          // e.g. "bba", "thp"
+  description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  semesters   Semester[]
+  resources   Resource[]
+
+  @@index([slug])
+}
+
+model Semester {
+  id          String     @id @default(cuid())
+  number      Int                          // 1–8
+  label       String                       // e.g. "Semester 1"
+  programId   String
+  program     Program    @relation(fields: [programId], references: [id], onDelete: Cascade)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  courses     Course[]
+  resources   Resource[]
+
+  @@unique([programId, number])
+  @@index([programId])
+}
+
+model Course {
+  id          String     @id @default(cuid())
+  name        String
+  code        String                       // e.g. "MGT-101"
+  instructor  String?
+  description String?
+  semesterId  String
+  semester    Semester   @relation(fields: [semesterId], references: [id], onDelete: Cascade)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  resources   Resource[]
+
+  @@unique([semesterId, code])
+  @@index([semesterId])
+  @@index([code])
+}
+
+model ResourceType {
+  id        String     @id @default(cuid())
+  name      String     @unique           // Notes, Slides, Books, Past Papers, Assignments, Miscellaneous
+  slug      String     @unique
+  icon      String?                      // Icon identifier
+
+  resources Resource[]
+}
+
+model Tag {
+  id        String       @id @default(cuid())
+  name      String       @unique
+  slug      String       @unique
+
+  resources ResourceTag[]
+
+  @@index([slug])
+}
+
+model Resource {
+  id             String       @id @default(cuid())
+  title          String
+  description    String?
+  fileUrl        String                   // Archive.org URL
+  fileSize       String?                  // e.g. "2.4 MB"
+  year           Int?                     // Important for past papers
+  typeId         String
+  type           ResourceType @relation(fields: [typeId], references: [id])
+  courseId       String
+  course         Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  semesterId     String
+  semester       Semester     @relation(fields: [semesterId], references: [id])
+  programId      String
+  program        Program      @relation(fields: [programId], references: [id])
+  uploadedById   String
+  uploadedBy     AdminUser    @relation(fields: [uploadedById], references: [id])
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  tags           ResourceTag[]
+
+  @@index([courseId])
+  @@index([semesterId])
+  @@index([programId])
+  @@index([typeId])
+  @@index([createdAt])
+}
+
+model ResourceTag {
+  resourceId String
+  tagId      String
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  tag        Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([resourceId, tagId])
+}
+
+// ─── ADMIN AUTH ───────────────────────────────────────────────────────────────
+
+model AdminUser {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  name      String
+  password  String                       // bcrypt hashed
+  role      AdminRole  @default(ADMIN)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  resources Resource[]
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+}
