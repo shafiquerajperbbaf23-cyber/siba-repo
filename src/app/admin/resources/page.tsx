@@ -1,5 +1,5 @@
-// src/app/admin/resources/page.tsx
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client"; 
 import Link from "next/link";
 import { ResourceTypeBadge } from "@/components/ui/ResourceTypeBadge";
 import { AdminResourceDeleteButton } from "@/components/admin/AdminResourceDeleteButton";
@@ -14,7 +14,7 @@ async function getResources(params: Props["searchParams"]) {
   const page = parseInt(params.page ?? "1", 10);
   const skip = (page - 1) * PAGE_SIZE;
 
-  const where: any = {};
+  const where: Prisma.ResourceWhereInput = {};
   if (params.q) {
     where.OR = [
       { title: { contains: params.q, mode: "insensitive" } },
