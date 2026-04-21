@@ -1,8 +1,9 @@
 // src/app/api/resources/route.ts
 // Line 2-4 — add Prisma import
 import { NextRequest, NextResponse } from "next/server";
-import { Prisma } from "@prisma/client";  // ADD THIS
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/adminGuard";  // ADD THIS
 import { z } from "zod";
 
 const PAGE_SIZE = 20;
