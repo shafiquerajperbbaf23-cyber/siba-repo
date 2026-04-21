@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   const typeSlug = searchParams.get("type");
   const courseId = searchParams.get("courseId");
 
-  const where: Parameters<typeof prisma.resource.findMany>[0]["where"] = {};
+  const where: Prisma.ResourceWhereInput = {};
 
   if (q) {
     where.OR = [
