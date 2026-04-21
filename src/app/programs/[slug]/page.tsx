@@ -1,4 +1,5 @@
 // src/app/programs/[slug]/page.tsx
+export const dynamic = "force-dynamic";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
