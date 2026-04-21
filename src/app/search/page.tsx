@@ -1,5 +1,5 @@
-// src/app/search/page.tsx
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client"; 
 import { Navbar } from "@/components/layout/Navbar";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { SearchBar } from "@/components/public/SearchBar";
@@ -22,7 +22,7 @@ async function search(params: Props["searchParams"]) {
   const page = parseInt(params.page ?? "1", 10);
   const skip = (page - 1) * PAGE_SIZE;
 
-  const where: Parameters<typeof prisma.resource.findMany>[0]["where"] = {};
+  const where: Prisma.ResourceWhereInput = {};
 
   if (params.q) {
     where.OR = [
