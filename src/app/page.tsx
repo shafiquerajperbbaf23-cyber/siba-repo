@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { Navbar } from "@/components/layout/Navbar";
 import { SearchBar } from "@/components/public/SearchBar";
 import { ResourceTypeBadge } from "@/components/ui/ResourceTypeBadge";
+export const dynamic = "force-dynamic";
 
 async function getHomeData() {
   const [programs, recentResources, counts] = await Promise.all([
