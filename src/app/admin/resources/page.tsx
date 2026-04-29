@@ -82,36 +82,26 @@ export default async function AdminResourcesPage({ searchParams }: Props) {
           </button>
         </form>
         <div className="flex gap-2 flex-wrap">
-          <select
-            className="input text-sm py-1.5 w-auto"
-            defaultValue={searchParams.program ?? ""}
-            onChange={(e) => {
-              const url = new URL(window.location.href);
-              if (e.target.value) url.searchParams.set("program", e.target.value);
-              else url.searchParams.delete("program");
-              window.location.href = url.toString();
-            }}
-          >
-            <option value="">All Programs</option>
-            {programs.map((p) => (
-              <option key={p.slug} value={p.slug}>{p.name}</option>
-            ))}
-          </select>
-          <select
-            className="input text-sm py-1.5 w-auto"
-            defaultValue={searchParams.type ?? ""}
-            onChange={(e) => {
-              const url = new URL(window.location.href);
-              if (e.target.value) url.searchParams.set("type", e.target.value);
-              else url.searchParams.delete("type");
-              window.location.href = url.toString();
-            }}
-          >
-            <option value="">All Types</option>
-            {resourceTypes.map((t) => (
-              <option key={t.slug} value={t.slug}>{t.name}</option>
-            ))}
-          </select>
+          <div className="flex gap-2 flex-wrap">
+  {programs.map((p) => (
+    
+      key={p.slug}
+      href={`/admin/resources?program=${p.slug}${searchParams.q ? `&q=${searchParams.q}` : ""}`}
+      className={`badge cursor-pointer ${searchParams.program === p.slug ? "badge-accent" : ""}`}
+    >
+      {p.name}
+    </a>
+  ))}
+  {resourceTypes.map((t) => (
+    
+      key={t.slug}
+      href={`/admin/resources?type=${t.slug}${searchParams.q ? `&q=${searchParams.q}` : ""}`}
+      className={`badge cursor-pointer ${searchParams.type === t.slug ? "badge-accent" : ""}`}
+    >
+      {t.name}
+    </a>
+  ))}
+</div>
         </div>
       </div>
 
