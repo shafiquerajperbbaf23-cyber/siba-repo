@@ -1,8 +1,11 @@
+// src/app/admin/resources/page.tsx
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client"; 
+import { Prisma } from "@prisma/client";
 import Link from "next/link";
 import { ResourceTypeBadge } from "@/components/ui/ResourceTypeBadge";
 import { AdminResourceDeleteButton } from "@/components/admin/AdminResourceDeleteButton";
+
+export const dynamic = "force-dynamic";
 
 interface Props {
   searchParams: { page?: string; q?: string; type?: string; program?: string };
@@ -68,40 +71,54 @@ export default async function AdminResourcesPage({ searchParams }: Props) {
       </div>
 
       {/* Filters */}
-      <div className="card p-4 flex flex-wrap gap-3">
-        <form className="flex gap-2 flex-1 min-w-0">
+      <div className="card p-4 space-y-3">
+        <form className="flex gap-2">
           <input
             name="q"
             type="search"
             defaultValue={searchParams.q}
             placeholder="Search by title or course code…"
-            className="input flex-1 min-w-0 text-sm py-1.5"
+            className="input flex-1 text-sm py-1.5"
           />
           <button type="submit" className="btn-primary text-sm px-3 py-1.5">
-            Filter
+            Search
           </button>
         </form>
-        <div className="flex gap-2 flex-wrap">
-          <div className="flex gap-2 flex-wrap">
-  {programs.map((p) => (
-    
-      key={p.slug}
-      href={`/admin/resources?program=${p.slug}${searchParams.q ? `&q=${searchParams.q}` : ""}`}
-      className={`badge cursor-pointer ${searchParams.program === p.slug ? "badge-accent" : ""}`}
-    >
-      {p.name}
-    </a>
-  ))}
-  {resourceTypes.map((t) => (
-    
-      key={t.slug}
-      href={`/admin/resources?type=${t.slug}${searchParams.q ? `&q=${searchParams.q}` : ""}`}
-      className={`badge cursor-pointer ${searchParams.type === t.slug ? "badge-accent" : ""}`}
-    >
-      {t.name}
-    </a>
-  ))}
-</div>
+        <div className="flex gap-2 flex-wrap items-center">
+          <span className="text-xs" style={{ color: "var(--text-subtle)" }}>Program:</span>
+          <Link
+            href={`/admin/resources${searchParams.q ? `?q=${searchParams.q}` : ""}`}
+            className={`badge cursor-pointer ${!searchParams.program ? "badge-accent" : ""}`}
+          >
+            All
+          </Link>
+          {programs.map((p) => (
+            <Link
+              key={p.slug}
+              href={`/admin/resources?program=${p.slug}${searchParams.q ? `&q=${searchParams.q}` : ""}`}
+              className={`badge cursor-pointer ${searchParams.program === p.slug ? "badge-accent" : ""}`}
+            >
+              {p.name}
+            </Link>
+          ))}
+        </div>
+        <div className="flex gap-2 flex-wrap items-center">
+          <span className="text-xs" style={{ color: "var(--text-subtle)" }}>Type:</span>
+          <Link
+            href={`/admin/resources${searchParams.q ? `?q=${searchParams.q}` : ""}${searchParams.program ? `${searchParams.q ? "&" : "?"}program=${searchParams.program}` : ""}`}
+            className={`badge cursor-pointer ${!searchParams.type ? "badge-accent" : ""}`}
+          >
+            All
+          </Link>
+          {resourceTypes.map((t) => (
+            <Link
+              key={t.slug}
+              href={`/admin/resources?type=${t.slug}${searchParams.q ? `&q=${searchParams.q}` : ""}${searchParams.program ? `&program=${searchParams.program}` : ""}`}
+              className={`badge cursor-pointer ${searchParams.type === t.slug ? "badge-accent" : ""}`}
+            >
+              {t.name}
+            </Link>
+          ))}
         </div>
       </div>
 
@@ -158,7 +175,7 @@ export default async function AdminResourcesPage({ searchParams }: Props) {
                 </td>
                 <td className="px-4 py-3 text-right">
                   <div className="flex items-center justify-end gap-2">
-                    <a
+                    
                       href={res.fileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
