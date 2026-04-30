@@ -4,7 +4,6 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
-  // ─── RESOURCE TYPES ───────────────────────────────────────────────────────
   const resourceTypes = [
     { name: "Notes", slug: "notes", icon: "FileText" },
     { name: "Slides", slug: "slides", icon: "Presentation" },
@@ -23,15 +22,13 @@ async function main() {
   }
   console.log("✅ Resource types seeded");
 
-  // ─── PROGRAMS ─────────────────────────────────────────────────────────────
   const bba = await prisma.program.upsert({
     where: { slug: "bba" },
     update: {},
     create: {
       name: "BBA",
       slug: "bba",
-      description:
-        "Bachelor of Business Administration — A comprehensive 4-year undergraduate program covering core business disciplines.",
+      description: "Bachelor of Business Administration — A comprehensive 4-year undergraduate program covering core business disciplines.",
     },
   });
 
@@ -41,19 +38,15 @@ async function main() {
     create: {
       name: "THP",
       slug: "thp",
-      description:
-        "Talent Hunt Program — A specialized accelerated program for high-achieving students.",
+      description: "Talent Hunt Program — A specialized accelerated program for high-achieving students.",
     },
   });
 
   console.log("✅ Programs seeded");
 
-  // ─── BBA SEMESTERS & COURSES ──────────────────────────────────────────────
+  type CourseEntry = { name: string; code: string; instructor?: string };
 
-  const bbaCourses: Record
-    number,
-    { name: string; code: string; instructor?: string }[]
-  > = {
+  const bbaCourses: Record<number, CourseEntry[]> = {
     1: [
       { name: "Computer Applications in Business", code: "CABS-101" },
       { name: "College Algebra", code: "MATH-101" },
@@ -101,11 +94,11 @@ async function main() {
       { name: "Business Ethics", code: "ETH-601" },
       { name: "Consumer Behavior", code: "MKT-601" },
       { name: "Corporate Social Responsibility", code: "CSR-601" },
-      { name: "Financial Reporting & Analysis", code: "ACC-601" },
+      { name: "Financial Reporting and Analysis", code: "ACC-601" },
       { name: "Managerial Accounting", code: "ACC-602" },
       { name: "Operations Management", code: "MGT-601" },
-      { name: "Specialization: HRM", code: "HRM-601" },
-      { name: "Specialization: Consumer Behavior", code: "MKT-602" },
+      { name: "Specialization HRM", code: "HRM-601" },
+      { name: "Specialization Consumer Behavior", code: "MKT-602" },
     ],
     7: [
       { name: "Supply Chain Management", code: "MGT-701" },
@@ -116,7 +109,7 @@ async function main() {
       { name: "Digital Marketing", code: "MKT-701" },
     ],
     8: [
-      { name: "Business Policy & Strategy", code: "MGT-801" },
+      { name: "Business Policy and Strategy", code: "MGT-801" },
       { name: "Research Project", code: "RP-801" },
       { name: "Internship Report", code: "INT-801" },
       { name: "Elective I", code: "ELEC-801" },
@@ -148,14 +141,12 @@ async function main() {
         },
       });
     }
-    console.log(`✅ Semester ${semNum}: ${courses.length} courses`);
+    console.log(`✅ BBA Semester ${semNum}: ${courses.length} courses`);
   }
 
-  // ─── THP SEMESTERS ────────────────────────────────────────────────────────
-  const thpCourses: Record
-    number,
-    { name: string; code: string }[]
-  > = {
+  type THP = { name: string; code: string };
+
+  const thpCourses: Record<number, THP[]> = {
     1: [
       { name: "Introduction to Business", code: "THP-BUS-101" },
       { name: "English Communication", code: "THP-ENG-101" },
@@ -208,7 +199,6 @@ async function main() {
     console.log(`✅ THP Semester ${semNum}: ${courses.length} courses`);
   }
 
-  // ─── ADMIN USER ───────────────────────────────────────────────────────────
   const hashedPassword = await bcrypt.hash(
     process.env.ADMIN_SEED_PASSWORD || "Admin@SIBA2024",
     12
