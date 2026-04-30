@@ -42,20 +42,28 @@ export default function BulkUploadPage() {
     );
 
     const resources = rows.map((row) => {
-      const course = courseMap[row.courseCode];
-      return {
-        title: row.title,
-        description: row.description || undefined,
-        fileUrl: row.fileUrl,
-        fileSize: row.fileSize || undefined,
-        year: row.year ? parseInt(row.year, 10) : undefined,
-        typeId: typeMap[row.typeSlug],
-        courseId: course?.id,
-        semesterId: course?.semesterId,
-        programId: course?.programId,
-        tags: row.tags ? row.tags.split(",").map((t) => t.trim()) : [],
-      };
-    });
+  const course = courseMap[row.courseCode];
+  return {
+    title: row.title,
+    description: row.description || undefined,
+    fileUrl: row.fileUrl,
+    fileSize: row.fileSize || undefined,
+    year: row.year ? parseInt(row.year, 10) : undefined,
+    typeId: typeMap[row.typeSlug],
+    courseId: course?.id,
+    semesterId: course?.semesterId,
+    programId: course?.programId,
+    tags: row.tags ? row.tags.split(",").map((t) => t.trim()) : [],
+  };
+});
+
+// DEBUG — remove after fixing
+console.log("Total rows parsed:", rows.length);
+console.log("Sample row:", rows[0]);
+console.log("typeMap keys:", Object.keys(typeMap));
+console.log("courseMap keys:", Object.keys(courseMap).slice(0, 5));
+console.log("Sample resource:", resources[0]);
+console.log("Resources with missing IDs:", resources.filter(r => !r.courseId || !r.typeId).length);
 
     const res = await fetch("/api/resources/bulk", {
       method: "POST",
