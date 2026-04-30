@@ -30,7 +30,7 @@ export default function BulkUploadPage() {
     // Fetch reference data for ID resolution
     const [typesRes, coursesRes] = await Promise.all([
       fetch("/api/resource-types").then((r) => r.json()),
-      fetch("/api/courses").then((r) => r.json()),
+      fetch("/api/courses/all").then((r) => r.json()),
     ]);
 
     const typeMap: Record<string, string> = Object.fromEntries(typesRes.map((t: { slug: string; id: string }) => [t.slug, t.id]));
