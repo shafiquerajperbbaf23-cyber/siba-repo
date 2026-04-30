@@ -10,10 +10,10 @@ const bulkItemSchema = z.object({
   fileUrl: z.string().url(),
   fileSize: z.string().optional(),
   year: z.number().int().optional(),
-  typeId: z.string().cuid(),
-  courseId: z.string().cuid(),
-  semesterId: z.string().cuid(),
-  programId: z.string().cuid(),
+  typeId: z.string().min(1),
+  courseId: z.string().min(1),
+  semesterId: z.string().min(1),
+  programId: z.string().min(1),
   tags: z.array(z.string()).optional(),
 });
 
@@ -26,7 +26,26 @@ export async function POST(req: NextRequest) {
   if (error) return error;
 
   const body = await req.json();
-  const result = bulkSchema.safeParse(body);
+
+  // Filter out rows with missing required IDs before validation
+  const cleaned = (body.resources ?? []).filter(
+    (r: Record<string, unknown>) =>
+      r.title &&
+      r.fileUrl &&
+      r.typeId &&
+      r.courseId &&
+      r.semesterId &&
+      r.programId
+  );
+
+  if (cleaned.length === 0) {
+    return NextResponse.json(
+      { error: "No valid resources found. Check that course codes exist in the database." },
+      { status: 400 }
+    );
+  }
+
+  const result = bulkSchema.safeParse({ resources: cleaned });
   if (!result.success) {
     return NextResponse.json({ error: result.error.flatten() }, { status: 400 });
   }
@@ -68,6 +87,6 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json(
     { created: created.length, errors },
-    { status: errors.length > 0 ? 207 : 201 }
+    { status: errors.length > 0 && created.length === 0 ? 400 : 201 }
   );
 }
