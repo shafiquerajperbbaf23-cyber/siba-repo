@@ -8,7 +8,6 @@ async function main() {
     { name: "Notes", slug: "notes", icon: "FileText" },
     { name: "Slides", slug: "slides", icon: "Presentation" },
     { name: "Books", slug: "books", icon: "BookOpen" },
-    { name: "Past Papers", slug: "past-papers", icon: "ScrollText" },
     { name: "Assignments", slug: "assignments", icon: "ClipboardList" },
     { name: "Miscellaneous", slug: "miscellaneous", icon: "Package" },
   ];
