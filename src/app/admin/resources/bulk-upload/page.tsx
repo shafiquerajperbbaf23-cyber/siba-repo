@@ -5,8 +5,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const TEMPLATE = `title,description,fileUrl,fileSize,year,typeSlug,courseCode,semesterNumber,programSlug,tags
-"Introduction to Management Notes","Chapter 1-5 lecture notes","https://archive.org/download/example/notes.pdf","2.1 MB",,"notes","MGT-101","1","bba","management,intro"
-"Financial Accounting Past Paper 2022","Annual exam paper","https://archive.org/download/example/paper.pdf","450 KB",2022,"past-papers","ACC-101","1","bba","past-paper,2022"`;
+"Introduction to Management Notes","Chapter 1-5 lecture notes","https://drive.google.com/uc?export=download&id=xxx","2.1 MB",,"notes","MGT-101","1","bba","management,intro"
+"Financial Accounting Assignment","Chapter exercises","https://drive.google.com/uc?export=download&id=xxx","450 KB",,"assignments","ACC-101","1","bba","accounting"`;
 
 export default function BulkUploadPage() {
   const router = useRouter();
