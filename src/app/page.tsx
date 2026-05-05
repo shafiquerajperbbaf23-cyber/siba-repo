@@ -34,7 +34,6 @@ export default async function HomePage() {
     { name: "Notes", slug: "notes", icon: "📄" },
     { name: "Slides", slug: "slides", icon: "🖼️" },
     { name: "Books", slug: "books", icon: "📚" },
-    { name: "Past Papers", slug: "past-papers", icon: "📝" },
     { name: "Assignments", slug: "assignments", icon: "📋" },
     { name: "Miscellaneous", slug: "miscellaneous", icon: "📦" },
   ];
