@@ -4,7 +4,6 @@ const TYPE_CONFIG: Record<string, { color: string; bg: string; icon: string }> =
   notes: { color: "#2563eb", bg: "#eff6ff", icon: "📄" },
   slides: { color: "#7c3aed", bg: "#f5f3ff", icon: "🖼️" },
   books: { color: "#059669", bg: "#ecfdf5", icon: "📚" },
-  "past-papers": { color: "#dc2626", bg: "#fef2f2", icon: "📝" },
   assignments: { color: "#d97706", bg: "#fffbeb", icon: "📋" },
   miscellaneous: { color: "#6b7280", bg: "#f9fafb", icon: "📦" },
 };
